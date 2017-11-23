@@ -6,34 +6,23 @@ services:
 
     redis:
       image: redis:alpine
-      container_name: module-redis-redis
-
-    postgres:
-      image: postgres:9.6-alpine
-      container_name: module-redis-postgres
-      working_dir: /application
-      volumes:
-        - .:/application
-      environment:
-        - POSTGRES_USER=root
-        - POSTGRES_PASSWORD=root
-        - POSTGRES_DB=root
+      container_name: module-redis-v-2-redis
 
     webserver:
-      image: nginx:alpine
-      container_name: module-redis-webserver
+      image: nginx
+      container_name: module-redis-v-2-webserver
       working_dir: /application
       volumes:
-          - .:/application
+          - ./application:/application
           - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       ports:
-       - "8030:80"
+          - "8030:80"
 
     php-fpm:
       build: phpdocker/php-fpm
-      container_name: module-redis-php-fpm
+      container_name: module-redis-v-2-php-fpm
       working_dir: /application
       volumes:
-        - .:/application
-        - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.1/fpm/conf.d/99-overrides.ini
+          - ./application:/application
+          - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.1/fpm/conf.d/99-overrides.ini
 
